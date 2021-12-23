@@ -1,0 +1,46 @@
+int water_level_sensor = 2;
+int water_level_sensor_value;
+int water_pump_1 = 3;
+int water_pump_2 = 7;
+const int buzzer = 4;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(water_level_sensor, INPUT_PULLUP);
+  pinMode(water_pump_1, OUTPUT);
+  pinMode(buzzer, OUTPUT);
+  pinMode(water_pump_2, OUTPUT);
+}
+
+void loop() {
+  while (Serial.available()) {
+    while (true) {
+      int data = Serial.parseInt();
+      water_level_sensor_value = digitalRead(water_level_sensor);
+      Serial.print("water_level_sensor_value: ");
+      Serial.println(water_level_sensor_value);
+      if (water_level_sensor_value == 1) {
+        Serial.println("Water level rised");
+        digitalWrite(buzzer, HIGH);
+      }
+      else if (water_level_sensor_value == 0) {
+        digitalWrite(buzzer, LOW);
+      }
+
+
+      if (data == 1) {
+        digitalWrite(water_pump_1, HIGH);
+        digitalWrite(water_pump_2, LOW);
+        Serial.println("Pump on");
+      }
+      else if (data == 2) {
+        digitalWrite(water_pump_1, LOW);
+        digitalWrite(water_pump_2, LOW);
+        Serial.println("Pump off");
+      }
+
+    }
+
+
+  }
+}
